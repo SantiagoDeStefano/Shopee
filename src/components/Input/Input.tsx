@@ -1,4 +1,4 @@
-import type { RegisterOptions, UseFormRegister } from 'react-hook-form'
+import type { UseFormRegister } from 'react-hook-form'
 
 interface FormData {
   email: string
@@ -13,10 +13,9 @@ interface Props {
   className?: string
   name: keyof FormData  
   register: UseFormRegister<FormData>
-  rules?: RegisterOptions<FormData, keyof FormData>
   autoComplete?: string
 }
-export default function Input({ type, errorMessages, placeHolder, className, name, register, rules, autoComplete}: Props) {
+export default function Input({ type, errorMessages, placeHolder, className, name, register, autoComplete}: Props) {
   return (
     <div className={className}>
       <input
@@ -24,7 +23,7 @@ export default function Input({ type, errorMessages, placeHolder, className, nam
         className='px-3 h-11 w-full outline-none border border-gray-300 focus:border-gray-500 rounded-sm placeholder:text-sm focus:shadow'
         placeholder={placeHolder}
         autoComplete={autoComplete}
-        {...register(name, rules)}
+        {...register(name)}
       />
       <div className='mt-1 text-red-600 min-h-[1rem] text-sm'>{errorMessages}</div>
     </div>
