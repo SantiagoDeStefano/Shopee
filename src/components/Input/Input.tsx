@@ -25,7 +25,7 @@ export default function Input({ type, errorMessages, placeHolder, className, nam
         autoComplete={autoComplete}
         {...register(name)}
       />
-      <div className='mt-1 text-red-600 min-h-[1rem] text-sm'>{errorMessages}</div>
+      <div className='mt-1.3 text-red-600 min-h-[1.3rem] text-sm'>{errorMessages}</div>
     </div>
   )
 }
