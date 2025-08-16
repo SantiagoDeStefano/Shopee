@@ -35,10 +35,10 @@ export default function Register() {
         console.log(data)
       },
       onError: (error) => {
-        if(isAxiosUnprocessableEntityError<ResponseApi<Omit<FormData, 'confirm_password'>>>(error)) {
+        if (isAxiosUnprocessableEntityError<ResponseApi<Omit<FormData, 'confirm_password'>>>(error)) {
           const formError = error.response?.data.data
-          if(formError) {
-            Object.keys(formError).forEach(key => {
+          if (formError) {
+            Object.keys(formError).forEach((key) => {
               setError(key as keyof Omit<FormData, 'confirm_password'>, {
                 message: formError[key as keyof Omit<FormData, 'confirm_password'>],
                 type: 'Server'
