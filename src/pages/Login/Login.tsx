@@ -73,7 +73,6 @@ export default function Login() {
                 className='mt-2'
                 errorMessages={errors.password?.message}
                 placeHolder='Password'
-                autoComplete='on'
               />
               <div className='mt-3'>
                 <button
