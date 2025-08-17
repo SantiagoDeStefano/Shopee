@@ -1,3 +1,5 @@
+import Input from '../../components/Input/Input'
+
 import { useForm } from 'react-hook-form'
 import { Link } from 'react-router-dom'
 import { schema, type Schema } from '../../utils/rules'
@@ -8,9 +10,8 @@ import { omit } from 'lodash'
 import { isAxiosUnprocessableEntityError } from '../../utils/utils'
 import { type ResponseApi } from '../../types/util.types'
 
-import Input from '../../components/Input/Input'
-
-type FormData = Schema
+type RegisterForm = Schema
+const registerSchema = schema
 
 export default function Register() {
   const {
@@ -18,12 +19,12 @@ export default function Register() {
     handleSubmit,
     setError,
     formState: { errors }
-  } = useForm<FormData>({
-    resolver: yupResolver(schema)
+  } = useForm<RegisterForm>({
+    resolver: yupResolver(registerSchema)
   })
 
   const registerAccountMutation = useMutation({
-    mutationFn: (body: Omit<FormData, 'confirm_password'>) => {
+    mutationFn: (body: Omit<RegisterForm, 'confirm_password'>) => {
       return registerAccount(body)
     }
   })
@@ -35,12 +36,12 @@ export default function Register() {
         console.log(data)
       },
       onError: (error) => {
-        if (isAxiosUnprocessableEntityError<ResponseApi<Omit<FormData, 'confirm_password'>>>(error)) {
+        if (isAxiosUnprocessableEntityError<ResponseApi<Omit<RegisterForm, 'confirm_password'>>>(error)) {
           const formError = error.response?.data.data
           if (formError) {
             Object.keys(formError).forEach((key) => {
-              setError(key as keyof Omit<FormData, 'confirm_password'>, {
-                message: formError[key as keyof Omit<FormData, 'confirm_password'>],
+              setError(key as keyof Omit<RegisterForm, 'confirm_password'>, {
+                message: formError[key as keyof Omit<RegisterForm, 'confirm_password'>],
                 type: 'Server'
               })
             })
@@ -57,7 +58,7 @@ export default function Register() {
           <div className='lg:col-span-2 lg:col-start-4'>
             <form className='p-10 rounded bg-white shadow-sm' onSubmit={onSubmit} noValidate>
               <div className='text-2xl'>Sign Up</div>
-              <Input
+              <Input<RegisterForm>
                 name='email'
                 register={register}
                 type='email'
@@ -65,7 +66,7 @@ export default function Register() {
                 errorMessages={errors.email?.message}
                 placeHolder='Email'
               />
-              <Input
+              <Input<RegisterForm>
                 name='password'
                 register={register}
                 type='password'
@@ -74,7 +75,7 @@ export default function Register() {
                 placeHolder='Password'
                 autoComplete='on'
               />
-              <Input
+              <Input<RegisterForm>
                 name='confirm_password'
                 register={register}
                 type='password'
