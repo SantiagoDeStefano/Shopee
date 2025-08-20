@@ -1,35 +1,22 @@
 import { Link } from 'react-router-dom'
-import { AnimatePresence, motion } from 'motion/react'
-import { useFloating, offset, flip, shift, useHover, useInteractions, arrow } from '@floating-ui/react'
-import { useRef, useState } from 'react'
+import Popover from '../Popover'
 
 export default function Header() {
-  const arrowRef = useRef(null)
-  const [open, setOpen] = useState(false)
-
-  const { x, y, strategy, refs, context, middlewareData } = useFloating({
-    placement: 'bottom', // tooltip appears below
-    middleware: [offset(5), flip(), shift(), arrow({ element: arrowRef })],
-    open,
-    onOpenChange: setOpen
-  })
-
-  // For delay when hover to popcover
-  const hover = useHover(context, {
-    delay: { open: 50, close: 50 }, // delay in ms
-    restMs: 50 // optional small delay to prevent flicker
-  })
-
-  const { getReferenceProps, getFloatingProps } = useInteractions([hover])
-
   return (
     <div className='pb-5 pt-2 bg-[linear-gradient(-180deg,_rgb(245,_61,_45),_rgb(255,_102,_51))]'>
       <div className='max-w-7xl mx-auto px-4'>
         <div className='flex justify-end'>
-          <div
+          {/* Language Popover*/}
+          <Popover
             className='flex items-center py-1 hover:text-gray-300 cursor-pointer text-white'
-            ref={refs.setReference}
-            {...getReferenceProps()}
+            renderPopover={
+              <div className='bg-white text-black shadow-md rounded-sm border border-gray-200'>
+                <div className='flex flex-col py-2 px-3 '>
+                  <button className='py-2 px-3 text-left hover:text-orange-500'>Tiếng Việt</button>
+                  <button className='py-2 px-3 text-left hover:text-orange-500 mt-2'>English</button>
+                </div>
+              </div>
+            }
           >
             <svg
               xmlns='http://www.w3.org/2000/svg'
@@ -56,53 +43,38 @@ export default function Header() {
             >
               <path strokeLinecap='round' strokeLinejoin='round' d='m19.5 8.25-7.5 7.5-7.5-7.5' />
             </svg>
-            {/* Tooltip */}
-            <AnimatePresence>
-              {open && (
-                <motion.div
-                  ref={refs.setFloating}
-                  {...getFloatingProps()}
-                  style={{
-                    position: strategy,
-                    top: y ?? 0,
-                    left: x ?? 0,
-                    transformOrigin: `${middlewareData.arrow?.x}px top`,
-                    zIndex: 1000
-                  }}
-                  initial={{ opacity: 0, transform: 'scale(0)' }}
-                  animate={{ opacity: 1, transform: 'scale(1)' }}
-                  exit={{ opacity: 0, transform: 'scale(0)' }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <span
-                    ref={arrowRef}
-                    className='border-x-transparent border-t-transparent border-b-white border-[11px] absolute -translate-y-[90%]'
-                    style={{
-                      left: middlewareData.arrow?.x,
-                      right: middlewareData.arrow?.y
-                    }}
-                  />
-                  <div className='bg-white text-black shadow-md rounded-sm border border-gray-200'>
-                    <div className='flex flex-col py-2 px-3 '>
-                      <button className='py-2 px-3 text-left hover:text-orange-500'>Tiếng Việt</button>
-                      <button className='py-2 px-3 text-left hover:text-orange-500 mt-2'>English</button>
-                    </div>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-          <div className='flex items-center py-1 hover:text-gray-300 cursor-pointer text-white ml-5'>
-            <div className='w-5 h-5 mr-2 flex-shrink-0'>
-              <img
-                src='https://down-vn.img.susercontent.com/file/vn-11134004-7ras8-mdip8iwuyfcf00_tn'
-                alt='avatar'
-                className='w-full h-full object-cover rounded-full'
-              />
+          </Popover>
+          {/* Profile Popover*/}
+          <Popover
+            className='flex items-center py-1 hover:text-gray-300 cursor-pointer text-white ml-5'
+            renderPopover={
+              <div className='bg-white text-black shadow-md rounded-sm border border-gray-200'>
+                <div className='flex flex-col py-2 px-3 '>
+                  <button className='py-2 px-3 text-left hover:text-orange-500'>My Account</button>
+                  <button className='py-2 px-3 text-left hover:text-orange-500 mt-2'>My Purchase</button>
+                  <button className='py-2 px-3 text-left hover:text-orange-500 mt-2'>Logout</button>
+                </div>
+              </div>
+            }
+          >
+            <div className='flex items-center py-1 hover:text-gray-300 cursor-pointer text-white ml-5'>
+              <div className='w-5 h-5 mr-2 flex-shrink-0'>
+                <img
+                  src='https://down-vn.img.susercontent.com/file/vn-11134004-7ras8-mdip8iwuyfcf00_tn'
+                  alt='avatar'
+                  className='w-full h-full object-cover rounded-full'
+                />
+              </div>
+              <div>Pham Khoi Nguyen</div>
             </div>
-            <div>Pham Khoi Nguyen</div>
-          </div>
+          </Popover>
         </div>
+
+
+
+
+
+
         <div className='grid grid-cols-12 gap-4 mt-4 items-end'>
           <Link to='/' className='col-span-2'>
             <svg viewBox='0 0 192 65' className='h-8 lg:h-11 fill-[white]'>
