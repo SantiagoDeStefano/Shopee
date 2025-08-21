@@ -1,19 +1,27 @@
 import { AnimatePresence, motion } from 'motion/react'
-import { useFloating, offset, flip, shift, useHover, useInteractions, arrow } from '@floating-ui/react'
-import { useRef, useState } from 'react'
+import { useFloating, offset, flip, shift, useHover, useInteractions, arrow, type Placement } from '@floating-ui/react'
+import React, { useRef, useState } from 'react'
 
 interface Props {
+  initialOpen?: boolean
   children: React.ReactNode
   renderPopover: React.ReactNode
+  placement?: Placement
   className?: string
 }
 
-export default function Popover({ children, renderPopover, className }: Props) {
+export default function Popover({
+  placement = 'bottom',
+  initialOpen = false,
+  children,
+  renderPopover,
+  className
+}: Props) {
   const arrowRef = useRef(null)
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(initialOpen)
 
   const { x, y, strategy, refs, context, middlewareData } = useFloating({
-    placement: 'bottom', // tooltip appears below
+    placement: placement,
     middleware: [offset(5), flip(), shift(), arrow({ element: arrowRef })],
     open,
     onOpenChange: setOpen
@@ -27,7 +35,7 @@ export default function Popover({ children, renderPopover, className }: Props) {
 
   const { getReferenceProps, getFloatingProps } = useInteractions([hover])
   return (
-    <div className={className} ref={refs.setReference} {...getReferenceProps()}>
+    <div className={className} ref={refs.setReference} {...getReferenceProps()} onClick={() => setOpen(!open)}>
       {children}
       {/* Tooltip */}
       <AnimatePresence>
