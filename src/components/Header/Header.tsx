@@ -11,9 +11,9 @@ export default function Header() {
             className='flex items-center py-1 hover:text-gray-300 cursor-pointer text-white'
             renderPopover={
               <div className='bg-white text-black shadow-md rounded-sm border border-gray-200'>
-                <div className='flex flex-col py-2 px-3 '>
-                  <button className='py-2 px-3 text-left hover:text-orange-500'>Tiếng Việt</button>
-                  <button className='py-2 px-3 text-left hover:text-orange-500 mt-2'>English</button>
+                <div className='flex flex-col'>
+                  <button className='py-4 px-6 hover:bg-slate-100 text-left hover:text-orange-500'>Tiếng Việt</button>
+                  <button className='py-4 px-6 hover:bg-slate-100 text-left hover:text-orange-500'>English</button>
                 </div>
               </div>
             }
@@ -44,15 +44,22 @@ export default function Header() {
               <path strokeLinecap='round' strokeLinejoin='round' d='m19.5 8.25-7.5 7.5-7.5-7.5' />
             </svg>
           </Popover>
+
           {/* Profile Popover*/}
           <Popover
-            className='flex items-center py-1 hover:text-gray-300 cursor-pointer text-white ml-5'
+            className='flex items-center hover:text-gray-300 cursor-pointer text-white ml-5'
             renderPopover={
               <div className='bg-white text-black shadow-md rounded-sm border border-gray-200'>
-                <div className='flex flex-col py-2 px-3 '>
-                  <button className='py-2 px-3 text-left hover:text-orange-500'>My Account</button>
-                  <button className='py-2 px-3 text-left hover:text-orange-500 mt-2'>My Purchase</button>
-                  <button className='py-2 px-3 text-left hover:text-orange-500 mt-2'>Logout</button>
+                <div className='flex flex-col'>
+                  <Link to='/' className='py-3 px-5 pr-7 text-left hover:text-cyan-500 hover:bg-slate-100 w-full'>
+                    My Account
+                  </Link>
+                  <Link to='/' className='py-3 px-5 pr-7 text-left hover:text-cyan-500 hover:bg-slate-100 w-full'>
+                    My Purchase
+                  </Link>
+                  <button className='py-3 px-5 pr-7 text-left hover:text-cyan-500 hover:bg-slate-100 w-full'>
+                    Logout
+                  </button>
                 </div>
               </div>
             }
@@ -69,11 +76,6 @@ export default function Header() {
             </div>
           </Popover>
         </div>
-
-
-
-
-
 
         <div className='grid grid-cols-12 gap-4 mt-4 items-end'>
           <Link to='/' className='col-span-2'>
