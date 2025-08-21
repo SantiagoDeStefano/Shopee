@@ -106,7 +106,77 @@ export default function Header() {
               </button>
             </div>
           </form>
-          <div className='col-span-1 mb-1 ml-8'>
+
+          <Popover
+            placement='bottom-end'
+            initialOpen
+            className='col-span-1 mb-1 ml-8 justify-self-start'
+            renderPopover={
+              <div className='bg-white relative shadow-md rounded-sm border border-gray-200 max-w-[400px] text-sm justify-end'>
+                <div className='p-2'>
+                  <div className='text-gray-400 capitalize'>Recently added products</div>
+                  <div className='mt-5'>
+                    <div className='mt-4 flex'>
+                      <div className='flex-shrink-0'>
+                        <img
+                          src='https://down-sg.img.susercontent.com/file/sg-11134207-23010-7kfuxcdl4cmv73_tn'
+                          alt='products_image'
+                          className='w-11 h-11 object-cover'
+                        />
+                      </div>
+                      <div className='flex-grow ml-2 overflow-hidden'>
+                        <div className='truncate'>
+                          [Torriden Official] Mini Size Trial - DIVE IN Low Molecular Hyaluronic Acid Serum for Daily
+                          Sensitive, Dry, Oily Skin, 10ml
+                        </div>
+                      </div>
+                      <div className='ml-2 flex-shrink-0'>
+                        <span className='text-[#ee4d2d]'>$9.00</span>
+                      </div>
+                    </div>
+                    <div className='mt-4 flex'>
+                      <div className='flex-shrink-0'>
+                        <img
+                          src='https://down-sg.img.susercontent.com/file/sg-11134207-7rff2-m9y24i3t9fmkeb_tn'
+                          alt='products_image'
+                          className='w-11 h-11 object-cover'
+                        />
+                      </div>
+                      <div className='flex-grow ml-2 overflow-hidden'>
+                        <div className='truncate'>
+                          [New 144Hz Best Selling Monitor] Acer KA242Y P6 24-Inch FHD IPS Monitor with 144Hz Refresh
+                          Rate
+                        </div>
+                      </div>
+                      <div className='ml-2 flex-shrink-0'>
+                        <span className='text-[#ee4d2d]'>$109.00</span>
+                      </div>
+                    </div>
+                    <div className='mt-4 flex'>
+                      <div className='flex-shrink-0'>
+                        <img
+                          src='https://down-sg.img.susercontent.com/file/sg-11134207-7rdyd-mdlxtbe55jtw2c_tn'
+                          alt='products_image'
+                          className='w-11 h-11 object-cover'
+                        />
+                      </div>
+                      <div className='flex-grow ml-2 overflow-hidden'>
+                        <div className='truncate'>
+                          Purest Co Feminine Care Pre+Probiotic Melts (Feminine Health & Balance)
+                        </div>
+                      </div>
+                      <div className='ml-2 flex-shrink-0'>
+                        <span className='text-[#ee4d2d]'>$49.37</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className='flex mt-6 items-center justify-end'>
+                    <button className='capitalize px-4 py-2 rounded-sm text-sm text-white cursor-pointer bg-[#f04c2c] hover:bg-[#f85c44]'>View My Shopping Cart</button>
+                  </div>
+                </div>
+              </div>
+            }
+          >
             <Link to='/login'>
               <svg
                 xmlns='http://www.w3.org/2000/svg'
@@ -123,7 +193,7 @@ export default function Header() {
                 />
               </svg>
             </Link>
-          </div>
+          </Popover>
         </div>
       </div>
     </div>
