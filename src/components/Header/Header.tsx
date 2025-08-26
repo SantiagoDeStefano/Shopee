@@ -1,7 +1,25 @@
 import { Link } from 'react-router-dom'
+import { logout } from '../../apis/auth.api'
+import { useMutation } from '@tanstack/react-query'
+import { useContext } from 'react'
+import { AppContext } from '../../contexts/app.context'
+
 import Popover from '../Popover'
 
 export default function Header() {
+  const { setIsAuthenticated, isAuthenticated } = useContext(AppContext)
+  const logoutMutation = useMutation({
+    mutationFn: () => logout(),
+    onSuccess: () => {
+      // Handle successful logout
+      setIsAuthenticated(false)
+    }
+  })
+
+  const handleLogout = () => {
+    logoutMutation.mutate()
+  }
+
   return (
     <div className='pb-5 pt-2 bg-[linear-gradient(-180deg,_rgb(245,_61,_45),_rgb(255,_102,_51))]'>
       <div className='max-w-7xl mx-auto px-4'>
@@ -46,35 +64,53 @@ export default function Header() {
           </Popover>
 
           {/* Profile Popover*/}
-          <Popover
-            className='flex items-center hover:text-gray-300 cursor-pointer text-white ml-5'
-            renderPopover={
-              <div className='bg-white text-black shadow-md rounded-sm border border-gray-200'>
-                <div className='flex flex-col'>
-                  <Link to='/' className='py-3 px-5 pr-7 text-left hover:text-cyan-500 hover:bg-slate-100 w-full'>
-                    My Account
-                  </Link>
-                  <Link to='/' className='py-3 px-5 pr-7 text-left hover:text-cyan-500 hover:bg-slate-100 w-full'>
-                    My Purchase
-                  </Link>
-                  <button className='py-3 px-5 pr-7 text-left hover:text-cyan-500 hover:bg-slate-100 w-full'>
-                    Logout
-                  </button>
+          {isAuthenticated && (
+            <Popover
+              className='flex items-center hover:text-gray-300 cursor-pointer text-white ml-5'
+              renderPopover={
+                <div className='bg-white text-black shadow-md rounded-sm border border-gray-200'>
+                  <div className='flex flex-col'>
+                    <Link to='/' className='py-3 px-5 pr-7 text-left hover:text-cyan-500 hover:bg-slate-100 w-full'>
+                      My Account
+                    </Link>
+                    <Link to='/' className='py-3 px-5 pr-7 text-left hover:text-cyan-500 hover:bg-slate-100 w-full'>
+                      My Purchase
+                    </Link>
+                    <button
+                      onClick={handleLogout}
+                      className='py-3 px-5 pr-7 text-left hover:text-cyan-500 hover:bg-slate-100 w-full'
+                    >
+                      Logout
+                    </button>
+                  </div>
                 </div>
+              }
+            >
+              <div className='flex items-center py-1 hover:text-gray-300 cursor-pointer text-white ml-5'>
+                <div className='w-5 h-5 mr-2 flex-shrink-0'>
+                  <img
+                    src='https://down-vn.img.susercontent.com/file/vn-11134004-7ras8-mdip8iwuyfcf00_tn'
+                    alt='avatar'
+                    className='w-full h-full object-cover rounded-full'
+                  />
+                </div>
+                <div>Pham Khoi Nguyen</div>
               </div>
-            }
-          >
-            <div className='flex items-center py-1 hover:text-gray-300 cursor-pointer text-white ml-5'>
-              <div className='w-5 h-5 mr-2 flex-shrink-0'>
-                <img
-                  src='https://down-vn.img.susercontent.com/file/vn-11134004-7ras8-mdip8iwuyfcf00_tn'
-                  alt='avatar'
-                  className='w-full h-full object-cover rounded-full'
-                />
-              </div>
-              <div>Pham Khoi Nguyen</div>
+            </Popover>
+          )}
+
+          {/* Not signed in Popover*/}
+          {!isAuthenticated && (
+            <div className='flex items-center'>
+              <Link to='/register' className='mx-3 capitalize text-white hover:text-white/70'>
+                Sign Up
+              </Link>
+              <div className='border-r-[1px] border-r-white/40 h-4' />
+              <Link to='/login' className='mx-3 capitalize text-white hover:text-white/70'>
+                Sign In
+              </Link>
             </div>
-          </Popover>
+          )}
         </div>
 
         <div className='grid grid-cols-12 gap-4 mt-4 items-end'>
@@ -87,7 +123,12 @@ export default function Header() {
           </Link>
           <form className='col-span-9'>
             <div className='bg-white rounded-sm p-1 flex'>
-              <input type='text' name='search' className='text-black px-3 py-2 flex-grow border-none outline-none' />
+              <input
+                type='text'
+                name='search'
+                className='text-black px-3 py-2 flex-grow border-none outline-none'
+                placeholder='Register now & get $12 off voucher!'
+              />
               <button className='rounded-sm py-2 px-6 flex-shrink-0 bg-[#ff5434] hover:opacity-80 cursor-pointer text-white'>
                 <svg
                   xmlns='http://www.w3.org/2000/svg'
@@ -171,7 +212,9 @@ export default function Header() {
                     </div>
                   </div>
                   <div className='flex mt-6 items-center justify-end'>
-                    <button className='capitalize px-4 py-2 rounded-sm text-sm text-white cursor-pointer bg-[#f04c2c] hover:bg-[#f85c44]'>View My Shopping Cart</button>
+                    <button className='capitalize px-4 py-2 rounded-sm text-sm text-white cursor-pointer bg-[#f04c2c] hover:bg-[#f85c44]'>
+                      View My Shopping Cart
+                    </button>
                   </div>
                 </div>
               </div>

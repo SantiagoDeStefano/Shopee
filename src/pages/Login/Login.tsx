@@ -1,19 +1,23 @@
 import Input from '../../components/Input/Input'
 
 import { useForm } from 'react-hook-form'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { schema, type Schema } from '../../utils/rules'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useMutation } from '@tanstack/react-query'
 import { loginAccount } from '../../apis/auth.api'
 import { omit } from 'lodash'
 import { isAxiosUnprocessableEntityError } from '../../utils/utils'
-import { type ResponseApi } from '../../types/util.types'
+import { type ErrorResponse } from '../../types/util.types'
+import { AppContext } from '../../contexts/app.context'
+import { useContext } from 'react'
 
 type LoginForm = Omit<Schema, 'confirm_password'>
 const loginSchema = schema.omit(['confirm_password'])
 
 export default function Login() {
+  const { setIsAuthenticated } = useContext(AppContext)
+  const navigate = useNavigate()
   const {
     register,
     handleSubmit,
@@ -32,11 +36,12 @@ export default function Login() {
   const onSubmit = handleSubmit((data) => {
     const body = omit(data, ['confirm_password'])
     loginAccountMutation.mutate(body as LoginForm, {
-      onSuccess: (data) => {
-        console.log(data)
+      onSuccess: () => {
+        setIsAuthenticated(true)
+        navigate('/')
       },
       onError: (error) => {
-        if (isAxiosUnprocessableEntityError<ResponseApi<Omit<LoginForm, 'confirm_password'>>>(error)) {
+        if (isAxiosUnprocessableEntityError<ErrorResponse<Omit<LoginForm, 'confirm_password'>>>(error)) {
           const formError = error.response?.data.data
           if (formError) {
             Object.keys(formError).forEach((key) => {
@@ -62,7 +67,7 @@ export default function Login() {
                 name='email'
                 register={register}
                 type='email'
-                className='mt-8'  
+                className='mt-8'
                 errorMessages={errors.email?.message}
                 placeHolder='Email'
               />
