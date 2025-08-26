@@ -17,7 +17,7 @@ type RegisterForm = Schema
 const registerSchema = schema
 
 export default function Register() {
-  const { setIsAuthenticated } = useContext(AppContext)
+  const { setIsAuthenticated, setProfile } = useContext(AppContext)
   const navigate = useNavigate()
   const {
     register,
@@ -37,8 +37,9 @@ export default function Register() {
   const onSubmit = handleSubmit((data) => {
     const body = omit(data, ['confirm_password'])
     registerAccountMutation.mutate(body, {
-      onSuccess: () => {
+      onSuccess: (data) => {
         setIsAuthenticated(true)
+        setProfile(data.data.data.user)
         navigate('/')
       },
       onError: (error) => {
@@ -93,7 +94,9 @@ export default function Register() {
               <div className='mt-2'>
                 <Button
                   type='submit'
-                  className={`w-full rounded text-center py-4 px-2 uppercase bg-red-500 text-white text-sm hover:bg-red-600 flex justify-center items-center ${registerAccountMutation.isPending ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+                  className={`w-full rounded text-center py-4 px-2 uppercase bg-red-500 text-white text-sm hover:bg-red-600 flex justify-center items-center ${
+                    registerAccountMutation.isPending ? 'cursor-not-allowed' : 'cursor-pointer'
+                  }`}
                   isLoading={registerAccountMutation.isPending}
                   disabled={registerAccountMutation.isPending}
                 >

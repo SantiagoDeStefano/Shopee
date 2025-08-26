@@ -1,6 +1,8 @@
 import axios, { AxiosError, HttpStatusCode, type AxiosInstance } from 'axios'
+import path from '../constants/path'
+
 import { toast } from 'react-toastify'
-import { clearAccessTokenFromLocalStorage, getAccessTokenFromLocalStorage, saveAccessTokenToLocalStorage } from '../pages/Profile/auth'
+import { clearLocalStorage, getAccessTokenFromLocalStorage, setAccessTokenToLocalStorage, setProfileToLocalStorage } from '../pages/Profile/auth'
 import { type AuthResponse } from '../types/auth.types'
 
 class Http {
@@ -31,13 +33,15 @@ class Http {
         // Any status code that lie within the range of 2xx cause this function to trigger
         // Do something with response data
         const { url } = response.config
-        if (url === '/login' || url === '/register') {
-          this.accessToken = (response.data as AuthResponse).data.access_token
-          saveAccessTokenToLocalStorage(this.accessToken)
+        if (url === path.login || url === path.register) {
+          const data = response.data as AuthResponse
+          this.accessToken = data.data.access_token
+          setAccessTokenToLocalStorage(this.accessToken)
+          setProfileToLocalStorage(data.data.user)
         }
-        else if(url === '/logout') {
+        else if(url === path.logout) {
           this.accessToken = ''
-          clearAccessTokenFromLocalStorage()
+          clearLocalStorage()
         }
         return response
       },

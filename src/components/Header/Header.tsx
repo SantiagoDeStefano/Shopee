@@ -5,14 +5,16 @@ import { useContext } from 'react'
 import { AppContext } from '../../contexts/app.context'
 
 import Popover from '../Popover'
+import path from '../../constants/path'
 
 export default function Header() {
-  const { setIsAuthenticated, isAuthenticated } = useContext(AppContext)
+  const { setIsAuthenticated, setProfile, profile, isAuthenticated } = useContext(AppContext)
   const logoutMutation = useMutation({
     mutationFn: () => logout(),
     onSuccess: () => {
       // Handle successful logout
       setIsAuthenticated(false)
+      setProfile(null)
     }
   })
 
@@ -26,7 +28,7 @@ export default function Header() {
         <div className='flex justify-end'>
           {/* Language Popover*/}
           <Popover
-            className='flex items-center py-1 hover:text-gray-300 cursor-pointer text-white'
+            className='flex items-center py-1 hover:text-white/70 cursor-pointer text-white'
             renderPopover={
               <div className='bg-white text-black shadow-md rounded-sm border border-gray-200'>
                 <div className='flex flex-col'>
@@ -66,11 +68,14 @@ export default function Header() {
           {/* Profile Popover*/}
           {isAuthenticated && (
             <Popover
-              className='flex items-center hover:text-gray-300 cursor-pointer text-white ml-5'
+              className='flex items-center hover:text-white/70 cursor-pointer text-white ml-5'
               renderPopover={
                 <div className='bg-white text-black shadow-md rounded-sm border border-gray-200'>
                   <div className='flex flex-col'>
-                    <Link to='/' className='py-3 px-5 pr-7 text-left hover:text-cyan-500 hover:bg-slate-100 w-full'>
+                    <Link
+                      to={path.profile}
+                      className='py-3 px-5 pr-7 text-left hover:text-cyan-500 hover:bg-slate-100 w-full'
+                    >
                       My Account
                     </Link>
                     <Link to='/' className='py-3 px-5 pr-7 text-left hover:text-cyan-500 hover:bg-slate-100 w-full'>
@@ -86,7 +91,7 @@ export default function Header() {
                 </div>
               }
             >
-              <div className='flex items-center py-1 hover:text-gray-300 cursor-pointer text-white ml-5'>
+              <div className='flex items-center py-1 hover:text-white/70 cursor-pointer text-white ml-5'>
                 <div className='w-5 h-5 mr-2 flex-shrink-0'>
                   <img
                     src='https://down-vn.img.susercontent.com/file/vn-11134004-7ras8-mdip8iwuyfcf00_tn'
@@ -94,7 +99,7 @@ export default function Header() {
                     className='w-full h-full object-cover rounded-full'
                   />
                 </div>
-                <div>Pham Khoi Nguyen</div>
+                <div>{profile?.email}</div>
               </div>
             </Popover>
           )}
@@ -102,11 +107,11 @@ export default function Header() {
           {/* Not signed in Popover*/}
           {!isAuthenticated && (
             <div className='flex items-center'>
-              <Link to='/register' className='mx-3 capitalize text-white hover:text-white/70'>
+              <Link to={path.register} className='mx-3 capitalize text-white hover:text-white/70'>
                 Sign Up
               </Link>
               <div className='border-r-[1px] border-r-white/40 h-4' />
-              <Link to='/login' className='mx-3 capitalize text-white hover:text-white/70'>
+              <Link to={path.login} className='mx-3 capitalize text-white hover:text-white/70'>
                 Sign In
               </Link>
             </div>
@@ -227,7 +232,7 @@ export default function Header() {
                 viewBox='0 0 24 24'
                 strokeWidth={1.5}
                 stroke='currentColor'
-                className='size-8 text-white hover:text-gray-300 cursor-pointer'
+                className='size-8 text-white hover:text-white/70 cursor-pointer'
               >
                 <path
                   strokeLinecap='round'

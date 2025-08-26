@@ -7,6 +7,7 @@ import RegisterLayout from './layouts/RegisterLayout'
 import Login from './pages/Login'
 import MainLayout from './layouts/MainLayout'
 import Profile from './pages/Profile'
+import path from './constants/path'
 
 // eslint-disable-next-line react-refresh/only-export-components
 function ProtectedRoute() {
@@ -31,11 +32,11 @@ export default function useRouteElements() {
       )
     },
     {
-      path: '',
+      path: '/',
       element: <ProtectedRoute />,
       children: [
         {
-          path: '/profile',
+          path: path.profile,
           element: (
             <MainLayout>
               <Profile />
@@ -49,7 +50,7 @@ export default function useRouteElements() {
       element: <RejectedRoute />,
       children: [
         {
-          path: '/login',
+          path: path.login,
           element: (
             <RegisterLayout>
               <Login />
@@ -57,7 +58,7 @@ export default function useRouteElements() {
           )
         },
         {
-          path: '/register',
+          path: path.register,
           element: (
             <RegisterLayout>
               <Register />
