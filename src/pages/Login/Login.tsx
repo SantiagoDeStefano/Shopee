@@ -1,4 +1,5 @@
 import Input from '../../components/Input/Input'
+import Button from '../../components/Button'
 
 import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
@@ -80,12 +81,14 @@ export default function Login() {
                 placeHolder='Password'
               />
               <div className='mt-3'>
-                <button
+                <Button
                   type='submit'
-                  className='cursor-pointer w-full rounded text-center py-4 px-2 uppercase bg-red-500 text-white text-sm hover:bg-red-600'
+                  className={`w-full rounded py-4 px-2 uppercase bg-red-500 text-white text-sm hover:bg-red-600 flex justify-center items-center ${loginAccountMutation.isPending ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+                  isLoading={loginAccountMutation.isPending}
+                  disabled={loginAccountMutation.isPending}
                 >
                   Log In
-                </button>
+                </Button>
               </div>
               <div className='flex items-center justify-center mt-8'>
                 <span className='text-slate-400'>New to Shopee?</span>

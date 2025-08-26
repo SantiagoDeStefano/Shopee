@@ -1,4 +1,5 @@
 import Input from '../../components/Input/Input'
+import Button from '../../components/Button'
 
 import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
@@ -90,12 +91,14 @@ export default function Register() {
                 autoComplete='on'
               />
               <div className='mt-2'>
-                <button
+                <Button
                   type='submit'
-                  className='cursor-pointer w-full rounded text-center py-4 px-2 uppercase bg-red-500 text-white text-sm hover:bg-red-600'
+                  className={`w-full rounded text-center py-4 px-2 uppercase bg-red-500 text-white text-sm hover:bg-red-600 flex justify-center items-center ${registerAccountMutation.isPending ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+                  isLoading={registerAccountMutation.isPending}
+                  disabled={registerAccountMutation.isPending}
                 >
                   Sign Up
-                </button>
+                </Button>
               </div>
               <div className='flex items-center justify-center mt-8'>
                 <span className='text-slate-400'>Have an account?</span>
