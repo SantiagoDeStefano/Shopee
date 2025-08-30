@@ -3,7 +3,7 @@ import Button from '../../components/Button'
 
 import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
-import { schema, type Schema } from '../../utils/rules'
+import { authSchema, type AuthSchema } from '../../utils/rules'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useMutation } from '@tanstack/react-query'
 import { loginAccount } from '../../apis/auth.api'
@@ -14,8 +14,8 @@ import { AppContext } from '../../contexts/app.context'
 import { useContext } from 'react'
 import { setProfileToLocalStorage } from '../Profile/auth'
 
-type LoginForm = Omit<Schema, 'confirm_password'>
-const loginSchema = schema.omit(['confirm_password'])
+type LoginForm = Omit<AuthSchema, 'confirm_password'>
+const loginSchema = authSchema.omit(['confirm_password'])
 
 export default function Login() {
   const { setIsAuthenticated, setProfile } = useContext(AppContext)

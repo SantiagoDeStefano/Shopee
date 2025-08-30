@@ -1,26 +1,40 @@
-import type { FieldValues, UseFormRegister, Path } from 'react-hook-form'
+import type { InputHTMLAttributes } from 'react'
+import type { FieldValues, UseFormRegister, RegisterOptions, Path } from 'react-hook-form'
 
-interface Props<T extends FieldValues> {
-  type: React.HTMLInputTypeAttribute
+interface Props<T extends FieldValues> extends InputHTMLAttributes<HTMLInputElement> {
   errorMessages?: string
   placeHolder?: string
-  className?: string
   name: Path<T>
-  register: UseFormRegister<T>
-  autoComplete?: string
+  classNameInput?: string
+  className?: string
+  classNameError?: string
+  register?: UseFormRegister<T>
+  rules?: RegisterOptions<T, Path<T>>
 }
 
-export default function Input<T extends FieldValues>({ type, errorMessages, placeHolder, className, name, register, autoComplete }: Props<T>) {
+export default function Input<T extends FieldValues>({
+  type,
+  errorMessages,
+  placeHolder,
+  autoComplete,
+  className,
+  name,
+  register,
+  rules,
+  classNameInput='p-3 w-full outline-none border border-gray-300 focus:border-gray-500 rounded-sm placeholder:text-sm focus:shadow',
+  classNameError='mt-1.3 text-red-600 min-h-[1.3rem] text-sm'
+}: Props<T>) {
+  const registerResult = register && name ? register(name, rules) : {}
   return (
     <div className={className}>
       <input
         type={type}
-        className='px-3 h-11 w-full outline-none border border-gray-300 focus:border-gray-500 rounded-sm placeholder:text-sm focus:shadow'
+        className={classNameInput}
         placeholder={placeHolder}
         autoComplete={autoComplete}
-        {...register(name)}
+        {...registerResult}
       />
-      <div className='mt-1.3 text-red-600 min-h-[1.3rem] text-sm'>{errorMessages}</div>
+      <div className={classNameError}>{errorMessages}</div>
     </div>
   )
 }

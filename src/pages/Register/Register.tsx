@@ -3,7 +3,7 @@ import Button from '../../components/Button'
 
 import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
-import { schema, type Schema } from '../../utils/rules'
+import { authSchema, type AuthSchema } from '../../utils/rules'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useMutation } from '@tanstack/react-query'
 import { registerAccount } from '../../apis/auth.api'
@@ -13,8 +13,8 @@ import { type ErrorResponse } from '../../types/util.types'
 import { useContext } from 'react'
 import { AppContext } from '../../contexts/app.context'
 
-type RegisterForm = Schema
-const registerSchema = schema
+type RegisterForm = AuthSchema
+const registerSchema = authSchema
 
 export default function Register() {
   const { setIsAuthenticated, setProfile } = useContext(AppContext)

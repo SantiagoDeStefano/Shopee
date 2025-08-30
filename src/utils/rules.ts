@@ -1,6 +1,6 @@
 import * as yup from 'yup'
 
-export const schema = yup.object({
+export const authSchema = yup.object({
   email: yup
     .string()
     .required('Email is required')
@@ -20,4 +20,4 @@ export const schema = yup.object({
     .oneOf([yup.ref('password')], 'Passwords do not match')
 })
 
-export type Schema = yup.InferType<typeof schema>
+export type AuthSchema = yup.InferType<typeof authSchema>
