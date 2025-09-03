@@ -1,12 +1,12 @@
 import Input from '../../components/Input/Input'
 import Button from '../../components/Button'
+import authApi from '../../apis/auth.api'
 
 import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
 import { authSchema, type AuthSchema } from '../../utils/rules'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useMutation } from '@tanstack/react-query'
-import { registerAccount } from '../../apis/auth.api'
 import { omit } from 'lodash'
 import { isAxiosUnprocessableEntityError } from '../../utils/utils'
 import { type ErrorResponse } from '../../types/util.types'
@@ -30,7 +30,7 @@ export default function Register() {
 
   const registerAccountMutation = useMutation({
     mutationFn: (body: Omit<RegisterForm, 'confirm_password'>) => {
-      return registerAccount(body)
+      return authApi.registerAccount(body)
     }
   })
 
