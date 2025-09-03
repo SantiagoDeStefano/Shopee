@@ -1,4 +1,7 @@
 import classNames from 'classnames'
+import type { QueryConfig } from '../../pages/ProductList/ProductList'
+import { Link, createSearchParams } from 'react-router-dom'
+import path from '../../constants/path'
 
 /**
 Với range = 2 áp dụng cho khoảng cách đầu, cuối và xung quanh current_page
@@ -20,13 +23,14 @@ Với range = 2 áp dụng cho khoảng cách đầu, cuối và xung quanh curr
 */
 
 interface Props {
-  page: number
-  setPage: React.Dispatch<React.SetStateAction<number>>
+  queryConfig: QueryConfig
   pageSize: number
 }
 
 const RANGE = 2
-export default function Pagination({ page, setPage, pageSize }: Props) {
+export default function Pagination({ queryConfig, pageSize }: Props) {
+  const page = Number(queryConfig.page)
+
   const renderPagination = () => {
     let threeDotsLeft = false
     let threeDotsRight = false
@@ -34,9 +38,9 @@ export default function Pagination({ page, setPage, pageSize }: Props) {
       if (!threeDotsLeft) {
         threeDotsLeft = true
         return (
-          <button key={index} className='bg-white rounded px-3 py-2 shadow-sm mx-2 cursor-pointer'>
+          <span key={index} className='bg-white rounded px-3 py-2 shadow-sm mx-2 cursor-pointer'>
             ...
-          </button>
+          </span>
         )
       }
       return null
@@ -45,9 +49,9 @@ export default function Pagination({ page, setPage, pageSize }: Props) {
       if (!threeDotsRight) {
         threeDotsRight = true
         return (
-          <button key={index} className='bg-white rounded px-3 py-2 shadow-sm mx-2 cursor-pointer'>
+          <span key={index} className='bg-white rounded px-3 py-2 shadow-sm mx-2 cursor-pointer'>
             ...
-          </button>
+          </span>
         )
       }
       return null
@@ -68,25 +72,61 @@ export default function Pagination({ page, setPage, pageSize }: Props) {
           return renderThreeDotsRight(index)
         }
         return (
-          <button
+          <Link
+            to={{
+              pathname: path.home,
+              search: createSearchParams({
+                ...queryConfig,
+                page: pageNumber.toString()
+              }).toString()
+            }}
             key={index}
             className={classNames('rounded px-3 py-2 shadow-sm mx-2 cursor-pointer', {
               'bg-[#ee4d2d] text-white': pageNumber == page,
               'bg-white': pageNumber != page
             })}
-            onClick={() => setPage(pageNumber)}
           >
             {pageNumber}
-          </button>
+          </Link>
         )
       })
   }
 
   return (
     <div className='flex flex-wrap mt-6 justify-center'>
-      <button className='bg-white rounded-sm px-3 py-2 shadow-sm mx-2 cursor-pointer'>Prev</button>
+      {page == 1 ? (
+        <button className='bg-white/30 rounded-sm px-3 py-2 shadow-sm mx-2 cursor-not-allowed'>Prev</button>
+      ) : (
+        <Link
+          to={{
+            pathname: path.home,
+            search: createSearchParams({
+              ...queryConfig,
+              page: (page - 1).toString()
+            }).toString()
+          }}
+          className='bg-white rounded-sm px-3 py-2 shadow-sm mx-2 cursor-pointer'
+        >
+          Prev
+        </Link>
+      )}
       {renderPagination()}
-      <button className='bg-white rounded-sm px-3 py-2 shadow-sm mx-2 cursor-pointer'>Next</button>
+      {page == pageSize ? (
+        <button className='bg-white/30 rounded-sm px-3 py-2 shadow-sm mx-2 cursor-not-allowed'>Prev</button>
+      ) : (
+        <Link
+          to={{
+            pathname: path.home,
+            search: createSearchParams({
+              ...queryConfig,
+              page: (page + 1).toString()
+            }).toString()
+          }}
+          className='bg-white rounded-sm px-3 py-2 shadow-sm mx-2 cursor-pointer'
+        >
+          Next
+        </Link>
+      )}
     </div>
   )
 }
