@@ -1,13 +1,25 @@
-import { Link } from 'react-router-dom'
+import { createSearchParams, Link } from 'react-router-dom'
 import path from '../../../constants/path'
 import Input from '../../../components/Input/Input'
 import Button from '../../../components/Button'
+import type { QueryConfig } from '../ProductList'
+import type { Category } from '../../../types/category.types'
+import classNames from 'classnames'
 
-export default function AsideFilter() {
+interface Props {
+  queryConfig: QueryConfig
+  categories: Category[]
+}
+
+export default function AsideFilter({ queryConfig, categories }: Props) {
+  const { category } = queryConfig
+  console.log(category, categories)
   return (
     <div className='py-4'>
-      <Link to={path.home} className='flex items-center font-bold'>
-        <svg viewBox='0 0 12 10' className='w-3 h-4 mr-3 fill-[black]'>
+      <Link to={path.home} className={classNames('flex items-center font-bold', {
+        'text-[#ee4d2d]': !category
+      })}>
+        <svg viewBox='0 0 12 10' className='w-3 h-4 mr-3 fill-current'>
           <g fill-rule='evenodd' stroke='none' stroke-width='1'>
             <g transform='translate(-373 -208)'>
               <g transform='translate(155 191)'>
@@ -24,34 +36,32 @@ export default function AsideFilter() {
       </Link>
       <div className='bg-gray-300 h-[1px] my-4' />
       <ul className='capitalize'>
-        <li className='py-2 pl-2'>
-          <Link to={path.home} className='relative px-1 text-[#ee4d2d] font-semibold'>
-            <svg viewBox='0 0 4 7' className='fill-[#ee4d2d] h-2 w-2 top-2 absolute left-[-10px]'>
-              <polygon points='4 3.5 0 0 0 7'></polygon>
-            </svg>
-            Cameras
-          </Link>
-        </li>
-        <li className='py-2 pl-2'>
-          <Link to={path.home} className='relative px-1'>
-            Security cameras & systems
-          </Link>
-        </li>
-        <li className='py-2 pl-2'>
-          <Link to={path.home} className='relative px-1'>
-            Memory cards
-          </Link>
-        </li>
-        <li className='py-2 pl-2'>
-          <Link to={path.home} className='relative px-1'>
-            Lenses
-          </Link>
-        </li>
-        <li className='py-2 pl-2'>
-          <Link to={path.home} className='relative px-1'>
-            Camera accessories
-          </Link>
-        </li>
+        {categories.map((categoryItem) => {
+          const isActive = category == categoryItem._id
+          return (
+            <li className='py-2 pl-2' key={categoryItem._id}>
+              <Link
+                to={{
+                  pathname: path.home,
+                  search: createSearchParams({
+                    ...queryConfig,
+                    category: categoryItem._id
+                  }).toString()
+                }}
+                className={classNames('relative px-1', {
+                  'text-[#ee4d2d] font-semibold': isActive
+                })}
+              >
+                {isActive && (
+                  <svg viewBox='0 0 4 7' className='fill-[#ee4d2d] h-2 w-2 top-2 absolute left-[-10px]'>
+                    <polygon points='4 3.5 0 0 0 7'></polygon>
+                  </svg>
+                )}
+                {categoryItem.name}
+              </Link>
+            </li>
+          )
+        })}
       </ul>
       <Link to={path.home} className='flex items-center font-bold mt-4 uppercase'>
         <svg
@@ -172,7 +182,9 @@ export default function AsideFilter() {
         </li>
       </ul>
       <div className='bg-gray-300 h-[1px] my-4' />
-      <Button className='w-full p-2 uppercase bg-[#ee4d2d] hover:bg-[#e64626] hover:cursor-pointer text-white text-sm flex justify-center items-center'>Clear all</Button>
+      <Button className='w-full p-2 uppercase bg-[#ee4d2d] hover:bg-[#e64626] hover:cursor-pointer text-white text-sm flex justify-center items-center'>
+        Clear all
+      </Button>
     </div>
   )
 }

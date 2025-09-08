@@ -155,7 +155,7 @@ export default function Header() {
 
           <Popover
             placement='bottom-end'
-            initialOpen
+            // initialOpen
             className='col-span-1 mb-1 ml-8 justify-self-start'
             renderPopover={
               <div className='bg-white relative shadow-md rounded-sm border border-gray-200 max-w-[400px] text-sm justify-end'>

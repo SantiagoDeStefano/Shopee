@@ -141,7 +141,7 @@ export default function SortProductList({ queryConfig, pageSize }: Props) {
             )}
 
             {page == pageSize ? (
-              <span className='flex justify-center items-center w-9 h-8 rounded-tl-sm rounded-bl-sm bg-white/60 hover:bg-slate-50 cursor-not-allowed shadow'>
+              <span className='flex justify-center items-center w-9 h-8 rounded-tr-sm rounded-br-sm bg-white/60 hover:bg-slate-50 cursor-not-allowed shadow'>
                 <svg
                   xmlns='http://www.w3.org/2000/svg'
                   fill='none'
