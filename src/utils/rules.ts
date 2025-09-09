@@ -20,4 +20,38 @@ export const authSchema = yup.object({
     .oneOf([yup.ref('password')], 'Passwords do not match')
 })
 
+export const priceSchema = yup.object({
+  price_min: yup
+    .string()
+    .default('')
+    .test({
+      name: 'invalid-price',
+      message: 'Invalid price',
+      test: function (value) {
+        const price_min = value
+        const { price_max } = this.parent
+        if (price_min != '' && price_max != '') {
+          return Number(price_max) >= Number(price_min)
+        }
+        return price_min != '' || price_max != ''
+      }
+    }),
+  price_max: yup
+    .string()
+    .default('')
+    .test({
+      name: 'invalid-price',
+      message: 'Invalid price',
+      test: function (value) {
+        const price_max = value
+        const { price_min } = this.parent
+        if (price_min != '' && price_max != '') {
+          return Number(price_max) >= Number(price_min)
+        }
+        return price_min != '' || price_max != ''
+      }
+    })
+})
+
 export type AuthSchema = yup.InferType<typeof authSchema>
+export type PriceSchema = yup.InferType<typeof priceSchema>

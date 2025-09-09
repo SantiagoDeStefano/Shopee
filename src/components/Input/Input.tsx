@@ -13,26 +13,22 @@ interface Props<T extends FieldValues> extends InputHTMLAttributes<HTMLInputElem
 }
 
 export default function Input<T extends FieldValues>({
-  type,
   errorMessages,
-  placeHolder,
-  autoComplete,
   className,
   name,
   register,
   rules,
   classNameInput='p-3 w-full outline-none border border-gray-300 focus:border-gray-500 rounded-sm placeholder:text-sm focus:shadow',
-  classNameError='mt-1.3 text-red-600 min-h-[1.3rem] text-sm'
+  classNameError='mt-1.3 text-red-600 min-h-[1.3rem] text-sm',
+  ...rest
 }: Props<T>) {
   const registerResult = register && name ? register(name, rules) : {}
   return (
     <div className={className}>
       <input
-        type={type}
         className={classNameInput}
-        placeholder={placeHolder}
-        autoComplete={autoComplete}
         {...registerResult}
+        {...rest}        
       />
       <div className={classNameError}>{errorMessages}</div>
     </div>

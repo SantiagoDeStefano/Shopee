@@ -1,24 +1,53 @@
 import { createSearchParams, Link } from 'react-router-dom'
 import path from '../../../constants/path'
-import Input from '../../../components/Input/Input'
 import Button from '../../../components/Button'
 import type { QueryConfig } from '../ProductList'
 import type { Category } from '../../../types/category.types'
 import classNames from 'classnames'
+import InputNumber from '../../../components/InputNumber'
+import { useForm, Controller } from 'react-hook-form'
+import { priceSchema, type PriceSchema } from '../../../utils/rules'
+import { yupResolver } from '@hookform/resolvers/yup'
 
 interface Props {
   queryConfig: QueryConfig
   categories: Category[]
 }
 
+type PriceForm = PriceSchema
+
+/**
+ * Validate's rule
+ * If price_min and price_max are not null => price_max >= price_min
+ * No price_min then no price_max and vice versa
+ */
 export default function AsideFilter({ queryConfig, categories }: Props) {
   const { category } = queryConfig
-  console.log(category, categories)
+  const {
+    control,
+    handleSubmit,
+    formState: { errors }
+  } = useForm<PriceForm>({
+    defaultValues: {
+      price_min: '',
+      price_max: ''
+    },
+    resolver: yupResolver(priceSchema)
+  })
+
+  const onSubmit = handleSubmit((data) => {
+    console.log(data)
+    console.log(errors)
+  })
+
   return (
     <div className='py-4'>
-      <Link to={path.home} className={classNames('flex items-center font-bold', {
-        'text-[#ee4d2d]': !category
-      })}>
+      <Link
+        to={path.home}
+        className={classNames('flex items-center font-bold', {
+          'text-[#ee4d2d]': !category
+        })}
+      >
         <svg viewBox='0 0 12 10' className='w-3 h-4 mr-3 fill-current'>
           <g fill-rule='evenodd' stroke='none' stroke-width='1'>
             <g transform='translate(-373 -208)'>
@@ -86,25 +115,51 @@ export default function AsideFilter({ queryConfig, categories }: Props) {
       <div className='bg-gray-300 h-[1px] my-4' />
       <div className='my-5'>
         <div>Price Range</div>
-        <form className='mt-2'>
+        <form className='mt-2' onSubmit={onSubmit}>
           <div className='flex items-start'>
-            <Input
-              type='text'
-              name='min_price'
-              className='grow'
-              classNameInput='p-1 w-full outline-none border border-gray-300 focus:border-gray-500 rounded-sm placeholder:text-sm focus:shadow bg-white'
-              placeHolder='₫ MIN'
+            <Controller
+              control={control}
+              name='price_min'
+              render={({ field }) => {
+                return (
+                  <InputNumber
+                    type='text'
+                    name='price_min'
+                    className='grow'
+                    classNameInput='p-1 w-full outline-none border border-gray-300 focus:border-gray-500 rounded-sm placeholder:text-sm focus:shadow bg-white'
+                    placeholder='₫ MIN'
+                    onChange={field.onChange}
+                    value={field.value}
+                    ref={field.ref}
+                  />
+                )
+              }}
             />
+
             <div className='mx-2 mt-2 shrink-0 h-[1px]'>-</div>
-            <Input
-              type='text'
-              name='max_price'
-              className='grow'
-              classNameInput='p-1 w-full outline-none border border-gray-300 focus:border-gray-500 rounded-sm placeholder:text-sm focus:shadow bg-white'
-              placeHolder='₫ MAX'
+
+            <Controller
+              control={control}
+              name='price_max'
+              render={({ field }) => {
+                return (
+                  <InputNumber
+                    type='text'
+                    name='price_max'
+                    className='grow'
+                    classNameInput='p-1 w-full outline-none border border-gray-300 focus:border-gray-500 rounded-sm placeholder:text-sm focus:shadow bg-white'
+                    placeholder='₫ MAX'
+                    onChange={field.onChange}
+                    value={field.value}
+                    ref={field.ref}
+                  />
+                )
+              }}
             />
           </div>
-          <Button className='w-full p-2 uppercase bg-[#ee4d2d] hover:cursor-pointer text-white hover:bg-[#e64626] text-sm flex justify-center items-center'>
+          <Button className='w-full p-2 uppercase bg-[#ee4d2d] hover:cursor-pointer text-white hover:bg-[#e64626] text-sm flex justify-center items-center'
+            
+          >
             Apply
           </Button>
         </form>
