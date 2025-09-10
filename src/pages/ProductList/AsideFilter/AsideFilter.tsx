@@ -1,4 +1,4 @@
-import { createSearchParams, Link } from 'react-router-dom'
+import { createSearchParams, Link, useNavigate } from 'react-router-dom'
 import path from '../../../constants/path'
 import Button from '../../../components/Button'
 import type { QueryConfig } from '../ProductList'
@@ -26,18 +26,28 @@ export default function AsideFilter({ queryConfig, categories }: Props) {
   const {
     control,
     handleSubmit,
+    trigger,
     formState: { errors }
   } = useForm<PriceForm>({
     defaultValues: {
       price_min: '',
       price_max: ''
     },
-    resolver: yupResolver(priceSchema)
+    resolver: yupResolver(priceSchema),
+    shouldFocusError: false
   })
 
+  const navigate = useNavigate()
+
   const onSubmit = handleSubmit((data) => {
-    console.log(data)
-    console.log(errors)
+    navigate({
+      pathname: path.home,
+      search: createSearchParams({
+        ...queryConfig,
+        price_max: data.price_max,
+        price_min: data.price_min
+      }).toString()
+    })
   })
 
   return (
@@ -124,19 +134,21 @@ export default function AsideFilter({ queryConfig, categories }: Props) {
                 return (
                   <InputNumber
                     type='text'
-                    name='price_min'
                     className='grow'
                     classNameInput='p-1 w-full outline-none border border-gray-300 focus:border-gray-500 rounded-sm placeholder:text-sm focus:shadow bg-white'
+                    classNameError='hidden'
                     placeholder='₫ MIN'
-                    onChange={field.onChange}
-                    value={field.value}
-                    ref={field.ref}
+                    {...field}
+                    onChange={(event) => {
+                      field.onChange(event)
+                      trigger('price_max')
+                    }}
                   />
                 )
               }}
             />
 
-            <div className='mx-2 mt-2 shrink-0 h-[1px]'>-</div>
+            <div className='mx-2 mt-2 shrink-0 h-[1px]'>⎯</div>
 
             <Controller
               control={control}
@@ -145,21 +157,22 @@ export default function AsideFilter({ queryConfig, categories }: Props) {
                 return (
                   <InputNumber
                     type='text'
-                    name='price_max'
                     className='grow'
                     classNameInput='p-1 w-full outline-none border border-gray-300 focus:border-gray-500 rounded-sm placeholder:text-sm focus:shadow bg-white'
+                    classNameError='hidden'
                     placeholder='₫ MAX'
-                    onChange={field.onChange}
-                    value={field.value}
-                    ref={field.ref}
+                    {...field}
+                    onChange={(event) => {
+                      field.onChange(event)
+                      trigger('price_min')
+                    }}
                   />
                 )
               }}
             />
           </div>
-          <Button className='w-full p-2 uppercase bg-[#ee4d2d] hover:cursor-pointer text-white hover:bg-[#e64626] text-sm flex justify-center items-center'
-            
-          >
+          <div className='mt-1.3 text-red-600 min-h-[1.3rem] text-sm text-center'>{errors.price_min?.message}</div>
+          <Button className='w-full p-2 uppercase bg-[#ee4d2d] hover:cursor-pointer text-white hover:bg-[#e64626] text-sm flex justify-center items-center'>
             Apply
           </Button>
         </form>
