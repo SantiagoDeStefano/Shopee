@@ -5,9 +5,9 @@ import { omitBy, isUndefined } from 'lodash'
 import productApi from '../../apis/product.api'
 import Pagination from '../../components/Pagination'
 import useQueryParams from '../../hooks/useQueryParams'
-import AsideFilter from './AsideFilter'
-import Product from './Product/Product'
-import SortProductList from './SortProductList'
+import AsideFilter from './components/AsideFilter'
+import Product from './components/Product'
+import SortProductList from './components/SortProductList'
 import categoryApi from '../../apis/category.api'
 
 export type QueryConfig = {
@@ -65,7 +65,7 @@ export default function ProductList() {
                   </div>
                 ))}
               </div>
-              <Pagination queryConfig={queryConfig} pageSize={productsData.data.data.pagination.page_size}/>
+              <Pagination queryConfig={queryConfig} pageSize={productsData.data.data.pagination.page_size} />
             </div>
           )}
         </div>

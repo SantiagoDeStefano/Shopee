@@ -1,9 +1,9 @@
 import classNames from 'classnames'
-import { orderBy, sortBy } from '../../../constants/product'
-import type { QueryConfig } from '../ProductList'
-import type { ProductListConfig } from '../../../types/product.types'
+import { orderBy, sortBy } from '../../../../constants/product'
+import type { QueryConfig } from '../../ProductList'
+import type { ProductListConfig } from '../../../../types/product.types'
 import { createSearchParams, Link, useNavigate } from 'react-router-dom'
-import path from '../../../constants/path'
+import path from '../../../../constants/path'
 import { omit } from 'lodash'
 
 interface Props {

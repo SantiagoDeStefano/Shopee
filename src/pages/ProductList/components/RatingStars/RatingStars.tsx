@@ -1,7 +1,7 @@
 import { createSearchParams, useNavigate } from 'react-router-dom'
-import type { QueryConfig } from '../ProductList'
+import type { QueryConfig } from '../../ProductList'
 
-import path from '../../../constants/path'
+import path from '../../../../constants/path'
 
 interface Props {
   queryConfig: QueryConfig
@@ -9,7 +9,7 @@ interface Props {
 
 export default function RatingStars({ queryConfig }: Props) {
   const navigate = useNavigate()
-  
+
   const handleFilterStar = (ratingFilter: number) => {
     navigate({
       pathname: path.home,
@@ -26,7 +26,10 @@ export default function RatingStars({ queryConfig }: Props) {
         .fill(0)
         .map((_, rowIndex) => (
           <li className='py-1 pl-2' key={rowIndex}>
-            <div className='flex items-center text-sm hover:cursor-pointer' onClick={() => handleFilterStar(5 - rowIndex)}>
+            <div
+              className='flex items-center text-sm hover:cursor-pointer'
+              onClick={() => handleFilterStar(5 - rowIndex)}
+            >
               {Array(5)
                 .fill(0)
                 .map((_, starIndex) => {
