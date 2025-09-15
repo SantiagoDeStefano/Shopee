@@ -8,6 +8,7 @@ import Login from './pages/Login'
 import MainLayout from './layouts/MainLayout'
 import Profile from './pages/Profile'
 import path from './constants/path'
+import ProductDetails from './pages/ProductDetails'
 
 // eslint-disable-next-line react-refresh/only-export-components
 function ProtectedRoute() {
@@ -63,6 +64,14 @@ export default function useRouteElements() {
             <RegisterLayout>
               <Register />
             </RegisterLayout>
+          )
+        },
+        {
+          path: path.productDetails,
+          element: (
+            <MainLayout>
+              <ProductDetails />
+            </MainLayout>
           )
         }
       ]
