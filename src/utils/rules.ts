@@ -53,5 +53,13 @@ export const priceSchema = yup.object({
     })
 })
 
+export const productNameSchema = yup.object({
+  name: yup
+  .string()
+  .trim()
+  .required('Product\'s name is required.')
+})
+
+export type ProductNameSchema = yup.InferType<typeof productNameSchema>
 export type AuthSchema = yup.InferType<typeof authSchema>
 export type PriceSchema = yup.InferType<typeof priceSchema>

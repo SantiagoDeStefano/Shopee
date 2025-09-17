@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import type { Product as ProductType } from '../../../../types/product.types'
-import { formatCurrency, formatNumberToSocialStyle, formatRating } from '../../../../utils/utils'
+import { formatCurrency, formatNumberToSocialStyle, formatRating, generateNameId } from '../../../../utils/utils'
 import path from '../../../../constants/path'
 
 interface Props {
@@ -9,7 +9,7 @@ interface Props {
 
 export default function Product({ product }: Props) {
   return (
-    <Link to={`${path.home}${product._id}`}>
+    <Link to={`${path.home}${generateNameId({ name: product.name, id: product._id })}`}>
       <div className='bg-white shadow rounded-sm hover:translate-y-[-0.0625rem] hover:shadow-md duration-100 transition-transform'>
         <div className='w-full pt-[100%] relative'>
           <img
@@ -19,9 +19,7 @@ export default function Product({ product }: Props) {
           />
         </div>
         <div className='p-2 overflow-hidden'>
-          <div className='min-h-[2rem] line-clamp-2 text-xs'>
-            {product.name}
-          </div>
+          <div className='min-h-[2rem] line-clamp-2 text-xs'>{product.name}</div>
           <div className='flex items-center mt-4 ml-0.5'>
             <div className='line-through max-w-[50%] text-gray-500 truncate'>
               <span className='text-xs'>₫</span>
@@ -41,7 +39,7 @@ export default function Product({ product }: Props) {
               />
               <span className='inline-block truncate ml-1 text-xs text-black'>{formatRating(product.rating)}</span>
             </div>
-            <span className='ml-2 text-xs'>{formatNumberToSocialStyle(product.sold)}+ sold</span>
+            <span className='ml-2 text-xs'>{formatNumberToSocialStyle(product.sold)} sold</span>
           </div>
         </div>
       </div>
