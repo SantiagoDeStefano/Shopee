@@ -6,15 +6,19 @@ import productApi from '../../apis/product.api'
 import InputNumber from '../../components/InputNumber/InputNumber'
 import ProductRating from '../ProductList/components/ProductRating'
 import DOMPurify from 'dompurify'
+import type { ProductListConfig } from '../../types/product.types'
+import Product from '../ProductList/components/Product'
 
 export default function ProductDetails() {
   const { nameId } = useParams()
   const id = getIdFromNameId(nameId as string)
+
   const { data: productDetailsData } = useQuery({
     queryKey: ['product', id],
     queryFn: () => productApi.getProductDetails(id as string),
     enabled: !!id
   })
+
   const [currentImageIndex, setCurrentImageIndex] = useState([0, 5])
   const [activeImage, setActiveImage] = useState('')
 
@@ -22,8 +26,17 @@ export default function ProductDetails() {
   const imageRef = useRef<HTMLImageElement>(null)
   const images = useMemo(() => (product ? product.images : []), [product])
 
-
   const currentImage = useMemo(() => images.slice(...currentImageIndex), [images, currentImageIndex])
+
+  const queryConfig: ProductListConfig = { limit: '20', page: '1', category: product?.category._id }
+  const { data: productsData } = useQuery({
+    queryKey: ['products', queryConfig],
+    queryFn: () => {
+      return productApi.getProducts(queryConfig as ProductListConfig)
+    },
+    enabled: Boolean(product),
+    staleTime: 3 * 60 * 1000
+  })
 
   useEffect(() => {
     if (images.length > 0) {
@@ -49,12 +62,12 @@ export default function ProductDetails() {
 
   const handleZoom = (event: React.MouseEvent<HTMLInputElement, MouseEvent>) => {
     const rect = event.currentTarget.getBoundingClientRect()
-    const image = imageRef.current as HTMLImageElement 
+    const image = imageRef.current as HTMLImageElement
     const { naturalHeight, naturalWidth } = image
-    const { offsetX, offsetY } = event.nativeEvent 
-    
-    const top = offsetY * (1 - naturalHeight/rect.height)
-    const left = offsetX * (1 - naturalWidth/rect.width)
+    const { offsetX, offsetY } = event.nativeEvent
+
+    const top = offsetY * (1 - naturalHeight / rect.height)
+    const left = offsetX * (1 - naturalWidth / rect.width)
 
     image.style.height = naturalHeight + 'px'
     image.style.width = naturalWidth + 'px'
@@ -77,7 +90,11 @@ export default function ProductDetails() {
         <div className='bg-white p-4 shadow'>
           <div className='grid grid-cols-12 gap-9'>
             <div className='col-span-5'>
-              <div className='relative w-full pt-[100%] shadow overflow-hidden cursor-zoom-in' onMouseMove={handleZoom} onMouseLeave={handleRemoveZoom}>
+              <div
+                className='relative w-full pt-[100%] shadow overflow-hidden cursor-zoom-in'
+                onMouseMove={handleZoom}
+                onMouseLeave={handleRemoveZoom}
+              >
                 <img
                   src={activeImage}
                   alt={product.name}
@@ -209,16 +226,32 @@ export default function ProductDetails() {
           </div>
         </div>
       </div>
-      <div className='max-w-7xl mx-auto px-5'>
-        <div className='mt-8 bg-white p-4 shadow'>
-          <div className='rounded bg-gray-50 p-4 text-lg capitalize text-slate-700'>Product Description</div>
-          <div className='mx-4 mt-6 mb-4 text-sm leading-loose'>
-            <div
-              dangerouslySetInnerHTML={{
-                __html: DOMPurify.sanitize(product.description)
-              }}
-            />
+      <div className='mt-8'>
+        <div className='max-w-7xl mx-auto px-5'>
+          <div className='bg-white p-4 shadow'>
+            <div className='rounded bg-gray-50 p-4 text-lg capitalize text-slate-700'>Product Description</div>
+            <div className='mx-4 mt-6 mb-4 text-sm leading-loose'>
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: DOMPurify.sanitize(product.description)
+                }}
+              />
+            </div>
           </div>
+        </div>
+      </div>
+      <div className='mt-8'>
+        <div className='max-w-7xl mx-auto px-5'>
+          <div className='uppercase text-[#858a8a] font-medium'>you may also like</div>
+          {productsData && (
+            <div className='mt-6 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3'>
+              {productsData.data.data.products.map((product) => (
+                <div className='col-span-1' key={product._id}>
+                  <Product product={product} />
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>
