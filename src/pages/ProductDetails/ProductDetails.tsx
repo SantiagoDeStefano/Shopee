@@ -1,11 +1,16 @@
 import { useParams } from 'react-router-dom'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { formatCurrency, formatNumberToSocialStyle, getIdFromNameId, rateSale } from '../../utils/utils'
 import { useEffect, useMemo, useState, useRef } from 'react'
+import { purchaseApi } from '../../apis/purchase.api'
+import { queryClient } from '../../main'
+import { purchasesStatus } from '../../constants/purchase'
+import { toast } from 'react-toastify'
+
 import productApi from '../../apis/product.api'
 import ProductRating from '../ProductList/components/ProductRating'
 import DOMPurify from 'dompurify'
-import type { ProductListConfig } from '../../types/product.types'
+import type { Product as ProductType, ProductListConfig } from '../../types/product.types'
 import Product from '../ProductList/components/Product'
 import QuantityController from '../../components/QuantityController'
 
@@ -37,6 +42,10 @@ export default function ProductDetails() {
     },
     enabled: Boolean(product),
     staleTime: 3 * 60 * 1000
+  })
+
+  const addToCartMutation = useMutation({
+    mutationFn: purchaseApi.addToCart
   })
 
   useEffect(() => {
@@ -83,6 +92,18 @@ export default function ProductDetails() {
 
   const handleBuyCount = (value: number) => {
     setBuyCount(value)
+  }
+
+  const addToCart = () => {
+    addToCartMutation.mutate(
+      { product_id: (product as ProductType)._id as string, buy_count: buyCount },
+      {
+        onSuccess: (data) => {
+          toast.success(data.data.message, { autoClose: 500 })
+          queryClient.invalidateQueries({ queryKey: ['purchases', { status: purchasesStatus.IN_CART }] })
+        }
+      }
+    )
   }
 
   if (!product) {
@@ -190,7 +211,10 @@ export default function ProductDetails() {
                 <div className='ml-6 text-gray-500 text-sm'>{product.quantity} available</div>
               </div>
               <div className='mt-8 flex items-center'>
-                <button className='flex h-12 px-8 items-center justify-center rounded-xs border border-[#ee4d2d] bg-[#ffeee8] text-[#ee4d2d] shadow-sm hover:bg-[#fff5f1] cursor-pointer'>
+                <button
+                  onClick={addToCart}
+                  className='flex h-12 px-8 items-center justify-center rounded-xs border border-[#ee4d2d] bg-[#ffeee8] text-[#ee4d2d] shadow-sm hover:bg-[#fff5f1] cursor-pointer'
+                >
                   <img
                     alt='icon-add-to-cart'
                     className='mr-4 h-5 w-5'

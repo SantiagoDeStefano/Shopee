@@ -33,6 +33,14 @@ export default function useRouteElements() {
       )
     },
     {
+      path: path.productDetails,
+      element: (
+        <MainLayout>
+          <ProductDetails />
+        </MainLayout>
+      )
+    },
+    {
       path: '/',
       element: <ProtectedRoute />,
       children: [
@@ -64,14 +72,6 @@ export default function useRouteElements() {
             <RegisterLayout>
               <Register />
             </RegisterLayout>
-          )
-        },
-        {
-          path: path.productDetails,
-          element: (
-            <MainLayout>
-              <ProductDetails />
-            </MainLayout>
           )
         }
       ]

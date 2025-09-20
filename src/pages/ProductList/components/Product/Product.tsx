@@ -7,7 +7,8 @@ interface Props {
   product: ProductType
 }
 
-export default function Product({ product }: Props) {
+export default function 
+Product({ product }: Props) {
   return (
     <Link to={`${path.home}${generateNameId({ name: product.name, id: product._id })}`}>
       <div className='bg-white shadow rounded-sm hover:translate-y-[-0.0625rem] hover:shadow-md duration-100 transition-transform'>
