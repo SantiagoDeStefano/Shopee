@@ -1,10 +1,11 @@
+import { useState } from 'react'
 import InputNumber, { type InputNumberProps } from '../InputNumber'
 
 interface QuantityProps extends InputNumberProps {
-  max: number
-  onIncrease: (value: number) => void
-  onDecrease: (value: number) => void
-  onType: (value: number) => void
+  max?: number
+  onIncrease?: (value: number) => void
+  onDecrease?: (value: number) => void
+  onType?: (value: number) => void
   classNameWrapper?: string
 }
 
@@ -17,30 +18,39 @@ export default function QuantityController({
   value,
   ...rest
 }: QuantityProps) {
+  const [localValue, setLocalValue] = useState<number>(Number(value || 0))
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     let _value = Number(event.target.value)
     if (max != undefined && _value > max) {
       _value = max
-    } else if (_value < 0) {
+    } else if (_value < 1) {
       _value = 1
     }
-    onType(_value)
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+    onType && onType(_value)
+    setLocalValue(_value)
   }
 
   const increase = () => {
-    let _value = Number(value) + 1
+    let _value = Number(value || localValue) + 1
     if (max != undefined && _value > max) {
       _value = max
     }
-    onIncrease(_value)
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+    onIncrease && onIncrease(_value)
+    setLocalValue(_value)
   }
 
   const decrease = () => {
-    let _value = Number(value) - 1
+    let _value = Number(value || localValue) - 1
     if (_value < 1) {
       _value = 0
     }
-    onDecrease(_value)
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+    onDecrease && onDecrease(_value)
+    setLocalValue(_value)
   }
 
   return (
@@ -61,7 +71,7 @@ export default function QuantityController({
         </svg>
       </button>
       <InputNumber
-        value={value}
+        value={value || localValue}
         className=''
         classNameError='hidden'
         classNameInput='h-8 w-12 border-t border-b border-gray-300 p-1 text-center outline-none'

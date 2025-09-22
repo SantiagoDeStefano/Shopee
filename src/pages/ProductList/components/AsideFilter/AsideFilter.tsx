@@ -5,12 +5,13 @@ import InputNumber from '../../../../components/InputNumber'
 import RatingStars from '../RatingStars'
 
 import { createSearchParams, Link, useNavigate } from 'react-router-dom'
-import type { QueryConfig } from '../../ProductList'
 import type { Category } from '../../../../types/category.types'
-import { useForm, Controller } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { priceSchema, type PriceSchema } from '../../../../utils/rules'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { omit } from 'lodash'
+import type { QueryConfig } from '../../../../hooks/useQueryConfig'
+import InputV2 from '../../../../components/InputV2'
 
 interface Props {
   queryConfig: QueryConfig
@@ -137,7 +138,7 @@ export default function AsideFilter({ queryConfig, categories }: Props) {
         <div>Price Range</div>
         <form className='mt-2' onSubmit={onSubmit}>
           <div className='flex items-start'>
-            <Controller
+            {/* <Controller
               control={control}
               name='price_min'
               render={({ field }) => {
@@ -156,11 +157,30 @@ export default function AsideFilter({ queryConfig, categories }: Props) {
                   />
                 )
               }}
+            /> */}
+            <InputV2
+              control={control}
+              type='number'
+              name='price_min'
+              className='grow'
+              classNameInput='p-1 w-full outline-none border border-gray-300 focus:border-gray-500 rounded-sm placeholder:text-sm focus:shadow bg-white'
+              classNameError='hidden'
+              placeholder='₫ MIN'
+              onChange={() => {
+                trigger('price_max')
+              }}
             />
 
             <div className='mx-2 mt-2 shrink-0 h-[1px]'>⎯</div>
+            <InputNumber
+              type='text'
+              className='grow'
+              classNameInput='p-1 w-full outline-none border border-gray-300 focus:border-gray-500 rounded-sm placeholder:text-sm focus:shadow bg-white'
+              classNameError='hidden'
+              placeholder='₫ MAX'
+            />
 
-            <Controller
+            {/* <Controller
               control={control}
               name='price_max'
               render={({ field }) => {
@@ -179,7 +199,7 @@ export default function AsideFilter({ queryConfig, categories }: Props) {
                   />
                 )
               }}
-            />
+            /> */}
           </div>
           <div className='mt-1.3 text-red-600 min-h-[1.3rem] text-sm text-center'>{errors.price_min?.message}</div>
           <Button className='w-full p-2 uppercase bg-[#ee4d2d] hover:cursor-pointer text-white hover:bg-[#e64626] text-sm flex justify-center items-center'>
