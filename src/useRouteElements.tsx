@@ -9,6 +9,7 @@ import MainLayout from './layouts/MainLayout'
 import Profile from './pages/Profile'
 import path from './constants/path'
 import ProductDetails from './pages/ProductDetails'
+import Cart from './pages/Cart'
 
 // eslint-disable-next-line react-refresh/only-export-components
 function ProtectedRoute() {
@@ -49,6 +50,14 @@ export default function useRouteElements() {
           element: (
             <MainLayout>
               <Profile />
+            </MainLayout>
+          )
+        },
+        {
+          path: path.cart,
+          element: (
+            <MainLayout>
+              <Cart />
             </MainLayout>
           )
         }

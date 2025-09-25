@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+  import { Link } from 'react-router-dom'
 import type { Product as ProductType } from '../../../../types/product.types'
 import { formatCurrency, formatNumberToSocialStyle, formatRating, generateNameId } from '../../../../utils/utils'
 import path from '../../../../constants/path'
