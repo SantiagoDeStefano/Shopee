@@ -10,6 +10,7 @@ import Profile from './pages/Profile'
 import path from './constants/path'
 import ProductDetails from './pages/ProductDetails'
 import Cart from './pages/Cart'
+import CartLayout from './layouts/CartLayout'
 
 // eslint-disable-next-line react-refresh/only-export-components
 function ProtectedRoute() {
@@ -56,11 +57,11 @@ export default function useRouteElements() {
         {
           path: path.cart,
           element: (
-            <MainLayout>
+            <CartLayout>
               <Cart />
-            </MainLayout>
+            </CartLayout>
           )
-        }
+        },
       ]
     },
     {
